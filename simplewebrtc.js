@@ -9,7 +9,7 @@ function SimpleWebRTC(opts) {
     var self = this;
     var options = opts || {};
     var config = this.config = {
-            url: 'https://sandbox.simplewebrtc.com:443/',
+            url: '', 
             socketio: {/* 'force new connection':true*/},
             connection: null,
             debug: false,
@@ -350,10 +350,10 @@ SimpleWebRTC.prototype.joinRoom = function (name, cb) {
                     }
                 }
             }
+            self.emit('joinedRoom', name);
         }
 
         if (cb) cb(err, roomDescription);
-        self.emit('joinedRoom', name);
     });
 };
 
