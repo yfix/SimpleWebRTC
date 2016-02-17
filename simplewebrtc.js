@@ -70,6 +70,12 @@ function SimpleWebRTC(opts) {
     } else {
         connection = this.connection = this.config.connection;
     }
+    
+    connection.on('disconnect', function() {
+        if (self.sessionReady) { // emit only when connect passed
+            self.emit('connectionBreak', connection.getSessionid());
+        }
+    });
 
     connection.on('connect', function () {
         self.emit('connectionReady', connection.getSessionid());
@@ -132,6 +138,9 @@ function SimpleWebRTC(opts) {
 
     // proxy events from WebRTC
     this.webrtc.on('*', function () {
+        
+        if (arguments[0] == 'volumeChange') return false; // temporary
+        
         self.emit.apply(self, arguments);
     });
 
